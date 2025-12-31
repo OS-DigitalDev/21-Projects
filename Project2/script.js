@@ -10,7 +10,13 @@ toggleBtn.addEventListener("click", () => {
 });
 
 const typedTextSpan = document.querySelector(".typed-text");
-const textArray = ["Software Engineer", "Mentor", "Comedian", "Runner"];
+const textArray = [
+  "Software Developer",
+  "Building Web Applications",
+  "Turning Ideas Into Code",
+  "Learning. Building. Improving."
+];
+
 const typingDelay = 100;
 const erasingDelay = 50;
 const newTextDelay = 2000;
