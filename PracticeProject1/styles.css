@@ -107,7 +107,7 @@ nav a:hover {
     display: none;
   }
 
-  /* MAGIC ✨ */
+ 
   .nav-checkbox:checked + .nav-toggle + .nav-links {
     display: flex;
   }
