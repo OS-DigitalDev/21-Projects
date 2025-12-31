@@ -1,0 +1,254 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+:root {
+  --bg-color: #0f172a;
+  --text-color: #cbd5e1;
+  --accent-color: #818cf8;
+  --card-bg: #1e293b;
+  --btn-bg: #6366f1;
+  --btn-text: #ffffff;
+  --border-color: #334155;
+  --subtle-text: #94a3b8;
+}
+
+.light-theme {
+  --bg-color: #f1f5f9;
+  --text-color: #334155;
+  --accent-color: #6366f1;
+  --card-bg: #ffffff;
+  --border-color: #e2e8f0;
+  --subtle-text: #64748b;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 5%;
+  background: var(--card-bg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2.5rem;
+}
+
+.nav-links a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: var(--accent-color);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent-color);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--accent-color);
+  color: var(--btn-text);
+  border-color: var(--accent-color);
+}
+
+/* hero section css */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10%;
+  height: 100vh;
+  gap: 2rem;
+}
+.hero-text {
+  max-width: 50%;
+}
+.hero-text h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.hero-text p {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--subtle-text);
+}
+.hero-image {
+  max-width: 30%;
+}
+.hero-image img {
+  width: 100%;
+  border-radius: 35px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.typed-text {
+  color: var(--accent-color);
+  font-weight: bolder;
+}
+
+.social-links {
+  margin-top: 2rem;
+}
+.social-links a {
+  margin: 0 1rem;
+}
+.btn-primary {
+  display: inline-block;
+  padding: 12px 25px;
+  background-color: var(--accent-color);
+  color: var(--btn-text);
+  border: none;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bolder;
+}
+.btn-primary:hover {
+  background-color: #4f46e5;
+}
+.tech-skills {
+  margin-top: 2rem;
+}
+
+.tech-skills h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--subtle-text);
+}
+
+.skills-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.skills-list li {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.skills-list i {
+  color: var(--accent-color);
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+}
+
+
+.recent-work .services .testimonial-card img {
+  padding: 4rem 10%;
+  background: var(--card-bg);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.work-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.work-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.work-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.work-card:hover img {
+    transform: scale(1.1);
+}
+
+.overlay{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    background: rgba(0, 0, 0, 0.7);
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.work-card:hover .overlay {
+    opacity: 1;
+}
+.overlay h3, .overlay p {
+    color: var(--text-color);
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
