@@ -332,7 +332,7 @@ document.addEventListener("DOMContentLoaded", init);
 
 
 const modalEl = document.getElementById("confirmModal");
-const mailToast = document.getElementById("mailToast");
+const mailDemo = document.getElementById("mailDemo");
 
 confirmBtn.addEventListener("click", () => {
   // Step 1: button state
@@ -346,10 +346,10 @@ confirmBtn.addEventListener("click", () => {
     modalInstance.hide();
 
     // Step 3: show fake email confirmation
-    mailToast.style.display = "block";
+    mailDemo.style.display = "block";
 
     setTimeout(() => {
-      mailToast.style.display = "none";
+      mailDemo.style.display = "none";
     }, 4000);
 
     // Reset button

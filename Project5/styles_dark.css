@@ -15,5 +15,5 @@ body{background:var(--bg);color:var(--text)}
 .booking-card{padding:12px;border-radius:8px;background:#071126;border:1px solid rgba(255,255,255,0.02)}
 .btn-primary{background:var(--primary);border-color:var(--primary);color:#012}
 .qs-online-dot{width:10px;height:10px;border-radius:50%;background:#10b981}
-.mail-toast{position:fixed;bottom:20px;right:20px;background:#0ea5a1;color:#042; padding:12px 18px;border-radius:8px;font-size:14px;display:none;z-index:9999}
+.mailDemo{position:fixed;bottom:20px;right:20px;background:#0ea5a1;color:#042; padding:12px 18px;border-radius:8px;font-size:14px;display:none;z-index:9999}
 .theme-switcher{background:#0b1220;color:var(--text)}
