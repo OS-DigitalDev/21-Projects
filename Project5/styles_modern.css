@@ -1,0 +1,21 @@
+/* Modern theme */
+:root{
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --text:#0f1724;
+  --primary:#2563eb;
+  --accent1:#7c3aed;
+  --accent2:#06b6d4;
+}
+body{background:var(--bg);color:var(--text);}
+.qs-panel{background:var(--card);border-radius:14px}
+.graident-text{background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;color:transparent}
+.slot-card{padding:16px;border-radius:10px;background:#fff;border:1px solid rgba(15,23,36,0.04);cursor:pointer}
+.slot-card.disabled{opacity:0.45;cursor:not-allowed}
+.booking-card{padding:12px;border-radius:8px;background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid rgba(15,23,36,0.05)}
+.btn-primary{background:var(--primary);border-color:var(--primary)}
+.qs-online-dot{width:10px;height:10px;border-radius:50%;background:#10b981}
+.mail-toast{position:fixed;bottom:20px;right:20px;background:#10b981;color:#fff;padding:12px 18px;border-radius:8px;font-size:14px;display:none;z-index:9999}
+.theme-switcher{background:rgba(255,255,255,0.95)}
+@media (prefers-color-scheme:dark){:root{--bg:#0b1220;--card:#071127;--text:#e6eef8;--muted:#9aa6b2}}
