@@ -233,6 +233,15 @@ body[data-mode="dark"] .card {
   box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
 }
 
+.form-control-color {
+  height: 2.5rem;
+  cursor: pointer;
+}
+
+.resume-preview {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
 @media (max-width: 991px) {
   .builder-panel {
     position: static !important;

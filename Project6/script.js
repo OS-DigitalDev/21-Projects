@@ -95,6 +95,8 @@ const schema = [
   },
 ];
 
+const customSections = [];
+
 const templates = {
   minimal: {
     label: "Minimal",
@@ -139,6 +141,7 @@ const templates = {
       `
       )}
       ${drawSkills(data.skillsArray)}
+      ${drawCustomSections(data)}
     `,
   },
   card: {
@@ -189,6 +192,7 @@ const templates = {
         )}
       </section>
       ${drawSkills(data.skillsArray)}
+      ${drawCustomSections(data)}
     `,
   },
 };
@@ -196,6 +200,8 @@ const templates = {
 const state = {
   data: {},
   templateKey: "minimal",
+  pageColor: "#ffffff",
+  textColor: "#000000",
 };
 
 const EXPORT_STYLES = `
@@ -223,6 +229,12 @@ const liveMeta = document.getElementById("liveMeta");
 const previewPane = document.querySelector(".preview-pane");
 const previewBgButtons = document.querySelectorAll("[data-preview-bg]");
 const themeToggle = document.getElementById("themeToggle");
+const pageColorPicker = document.getElementById("pageColorPicker");
+const textColorPicker = document.getElementById("textColorPicker");
+const addSectionBtn = document.getElementById("addSectionBtn");
+const sectionModal = document.getElementById("sectionModal");
+const sectionNameInput = document.getElementById("sectionNameInput");
+const confirmAddSection = document.getElementById("confirmAddSection");
 
 const collections = {};
 const navButtons = new Map();
@@ -236,6 +248,8 @@ function startApp() {
   setupTemplates();
   buildForm();
   bindUI();
+  bindColorPickers();
+  bindCustomSectionBtn();
   setPreviewBg("plain");
   markTemplate(state.templateKey);
   drawPreview();
@@ -284,7 +298,8 @@ function buildForm() {
     threshold: 0.35, // threshold: callback fires when 35% of the section is visible.
   });
 
-  schema.forEach((section) => {
+  const allSections = [...schema, ...customSections];
+  allSections.forEach((section) => {
     const wrapper = document.createElement("section");
     wrapper.className = "vstack gap-3 border-bottom pb-4";
     wrapper.dataset.section = section.id;
@@ -326,6 +341,86 @@ function buildForm() {
     addSectionLink(section);
     sectionObserver.observe(wrapper);
   });
+}
+
+function addCustomSection(sectionName) {
+  // Role: creates a new custom section and adds it to the form
+  const newSection = {
+    id: sectionName.toLowerCase().replace(/\s+/g, "-"),
+    title: sectionName,
+    repeatable: true,
+    isCustom: true,
+    fields: [
+      { key: "title", label: "Title", type: "text" },
+      { key: "details", label: "Details", type: "textarea", rows: 2 },
+    ],
+  };
+  
+  customSections.push(newSection);
+  
+  // Add to form
+  const wrapper = document.createElement("section");
+  wrapper.className = "vstack gap-3 border-bottom pb-4";
+  wrapper.dataset.section = newSection.id;
+  wrapper.id = newSection.id;
+
+  const heading = document.createElement("div");
+  heading.className = "form-section-title d-flex justify-content-between align-items-center";
+  heading.innerHTML = `
+    <span>${newSection.title}</span>
+    <button type="button" class="btn btn-sm btn-outline-danger" data-section-id="${newSection.id}">Remove</button>
+  `;
+  wrapper.appendChild(heading);
+  
+  heading.querySelector("button").addEventListener("click", () => removeCustomSection(newSection.id));
+
+  const collection = document.createElement("div");
+  collection.className = "vstack gap-3";
+  collection.dataset.collection = newSection.id;
+  collections[newSection.id] = collection;
+  wrapper.appendChild(collection);
+
+  const controls = document.createElement("div");
+  controls.className = "d-flex justify-content-end";
+  const addBtn = document.createElement("button");
+  addBtn.type = "button";
+  addBtn.className = "btn btn-sm btn-outline-primary";
+  addBtn.textContent = `Add ${newSection.title}`;
+  addBtn.addEventListener("click", () => addRepeater(newSection, collection));
+  controls.appendChild(addBtn);
+  wrapper.appendChild(controls);
+
+  addRepeater(newSection, collection);
+
+  form.appendChild(wrapper);
+  addSectionLink(newSection);
+  sectionObserver.observe(wrapper);
+}
+
+function removeCustomSection(sectionId) {
+  // Role: removes a custom section from form and data
+  const sectionIndex = customSections.findIndex(s => s.id === sectionId);
+  if (sectionIndex > -1) {
+    customSections.splice(sectionIndex, 1);
+  }
+  
+  const sectionElement = document.getElementById(sectionId);
+  if (sectionElement) {
+    sectionElement.remove();
+  }
+  
+  const navBtn = navButtons.get(sectionId);
+  if (navBtn) {
+    navBtn.remove();
+    navButtons.delete(sectionId);
+  }
+  
+  if (state.data[sectionId]) {
+    delete state.data[sectionId];
+  }
+  
+  drawPreview();
+  refreshStats();
 }
 
 function buildField(section, field, index = null) {
@@ -383,9 +478,10 @@ function handleInput(event) {
 }
 
 function isRepeater(sectionId) {
-  // Role: tells whether a schema section supports repeats.
-  return schema.find((section) => section.id === sectionId)?.repeatable;
+  return [...schema, ...customSections]
+    .find(section => section.id === sectionId)?.repeatable;
 }
+
 
 function addRepeater(section, collection) {
   // Role: inserts a repeatable section card with inputs.
@@ -454,6 +550,15 @@ function prepareData() {
     ...item,
   }));
 
+  // Add custom sections to payload
+  customSections.forEach((section) => {
+  payload[section.id] = (state.data[section.id] || []).map(item => ({
+    title: item.title || "",
+    details: item.details || ""
+  }));
+});
+
+
   return payload;
 }
 
@@ -510,6 +615,35 @@ function drawSkills(skills = []) {
     </section>
   `;
 }
+
+function drawCustomSections(data) {
+  let html = "";
+
+  customSections.forEach((section) => {
+    const items = data[section.id];
+
+    if (!Array.isArray(items) || items.length === 0) return;
+
+    html += `
+      <section>
+        <h2>${section.title}</h2>
+        ${items
+          .map(
+            (item) => `
+              <div class="mb-3">
+                <div class="fw-semibold">${item.title || ""}</div>
+                ${item.details ? `<p>${item.details}</p>` : ""}
+              </div>
+            `
+          )
+          .join("")}
+      </section>
+    `;
+  });
+
+  return html;
+}
+
 
 function drawBadges(items) {
   if (!items.length) return "";
@@ -602,6 +736,58 @@ function setPreviewBg(mode) {
   }
 }
 
+function bindColorPickers() {
+  // Role: binds color picker inputs to page styling
+  if (pageColorPicker) {
+    pageColorPicker.addEventListener("input", (e) => {
+      state.pageColor = e.target.value;
+      applyCustomColors();
+    });
+  }
+  
+  if (textColorPicker) {
+    textColorPicker.addEventListener("input", (e) => {
+      state.textColor = e.target.value;
+      applyCustomColors();
+    });
+  }
+}
+
+function applyCustomColors() {
+  // Role: applies custom page and text colors to the preview
+  const resumePreview = document.getElementById("resumePreview");
+  if (resumePreview) {
+    resumePreview.style.backgroundColor = state.pageColor;
+    resumePreview.style.color = state.textColor;
+  }
+}
+
+function bindCustomSectionBtn() {
+  // Role: binds add custom section button
+  if (addSectionBtn) {
+    addSectionBtn.addEventListener("click", () => {
+      if (sectionModal) {
+        const modal = new bootstrap.Modal(sectionModal);
+        modal.show();
+      }
+    });
+  }
+  
+  if (confirmAddSection) {
+    confirmAddSection.addEventListener("click", () => {
+      const sectionName = (sectionNameInput?.value || "").trim();
+      if (sectionName) {
+        addCustomSection(sectionName);
+        sectionNameInput.value = "";
+        const modal = bootstrap.Modal.getInstance(sectionModal);
+        modal?.hide();
+        drawPreview();
+        refreshStats();
+      }
+    });
+  }
+}
+
 function toggleTheme() {
   // Role: flips between light and dark theme modes.
   const enableDark = document.body.dataset.mode !== "dark";
@@ -613,7 +799,10 @@ function syncForm() {
   // Role: pushes current state values back into inputs.
   Object.entries(collections).forEach(([sectionId, collection]) => {
     const targetLength = (state.data[sectionId] || []).length || 1;
-    const section = schema.find((item) => item.id === sectionId);
+    const section =
+      schema.find(s => s.id === sectionId) ||
+      customSections.find(s => s.id === sectionId);
+
     while (collection.childElementCount < targetLength) {
       addRepeater(section, collection);
     }
@@ -656,7 +845,8 @@ function countFilled() {
 
 function refreshSections() {
   // Role: toggles nav pill completion styling.
-  schema.forEach((section) => {
+  [...schema, ...customSections].forEach(section => {
+
     const complete = sectionHasData(section);
     const navButton = navButtons.get(section.id);
     if (navButton) {
@@ -669,7 +859,8 @@ function sectionHasData(section) {
   // Role: returns true when any fields in section are filled.
   if (section.repeatable) {
     return (state.data[section.id] || []).some((entry) =>
-      section.fields.some((field) => entry?.[field.key]?.trim())
+      section.fields.some((field) => String(entry?.[field.key] || "").trim()
+)
     );
   }
   return section.fields.some((field) => state.data[field.key]?.trim());
@@ -684,78 +875,152 @@ function refreshMeta() {
   }
 }
 
-async function savePdf() {
-  // Role: exports the resume as PDF with HTML fallback.
-  const template = templates[state.templateKey];
-  const prepared = prepareData();
 
-  if (!window.html2canvas || !window.jspdf) {
-    console.warn("PDF libraries unavailable. Falling back to HTML download.");
-    saveHtml(template, prepared);
-    return;
-  }
-
-  const exportNode = buildExportNode(template, prepared);
-  document.body.appendChild(exportNode);
-  await waitFrame();
-
-  try {
-    const canvas = await window.html2canvas(exportNode, {
-      scale: window.devicePixelRatio > 1 ? 2 : 1.5, // scale: increase pixel density for sharper PDFs.
-      backgroundColor: "#ffffff", // backgroundColor: forces white background even if transparent.
-      useCORS: true, // useCORS: allow cross-origin images/fonts to render in the canvas.
-    });
-    const imgData = canvas.toDataURL("image/png");
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF("p", "pt", "a4");
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const ratio = Math.min(
-      pageWidth / canvas.width,
-      pageHeight / canvas.height
-    );
-    const imgWidth = canvas.width * ratio;
-    const imgHeight = canvas.height * ratio;
-    const marginX = (pageWidth - imgWidth) / 2;
-    const marginY = 36;
-
-    pdf.addImage(
-      imgData,
-      "PNG",
-      marginX,
-      marginY,
-      imgWidth,
-      imgHeight,
-      undefined,
-      "FAST"
-    );
-    pdf.save(`${(prepared.fullName || "resume").replace(/\s+/g, "-")}.pdf`);
-  } catch (error) {
-    console.error("PDF export failed", error);
-    saveHtml(template, prepared);
-  } finally {
-    document.body.removeChild(exportNode);
-  }
-}
 
 function buildExportNode(template, prepared) {
-  // Role: builds hidden DOM node for html2canvas.
   const node = document.createElement("div");
   node.className = `resume-preview ${template.className}`;
   node.style.position = "absolute";
   node.style.left = "-9999px";
   node.style.top = "0";
-  node.style.width = "794px"; // approx A4 width at 96dpi
+  node.style.width = "794px";
   node.style.background = "#ffffff";
   node.style.padding = "48px";
   node.style.boxSizing = "border-box";
-  node.innerHTML = template.render(prepared);
+
+  if (exportState.branding) {
+    const brand = document.createElement("img");
+    brand.src = "branding.jpg";
+    brand.style.position = "absolute";
+    brand.style.top = "24px";
+    brand.style.right = "24px";
+    brand.style.width = "80px";
+    brand.style.opacity = "0.85";
+    node.appendChild(brand);
+  }
+
+  const content = document.createElement("div");
+  content.innerHTML = template.render(prepared);
+  node.appendChild(content);
+
   return node;
 }
+
 
 function waitFrame() {
   // Role: waits one animation frame for layout.
   return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+}
+
+
+
+
+if (resetBtn) {
+  resetBtn.addEventListener("click", () => {
+    form.reset();
+    state.data = {};
+    Object.entries(collections).forEach(([sectionId, collection]) => {
+      collection.innerHTML = "";
+      const section = schema.find((s) => s.id === sectionId);
+      addRepeater(section, collection);
+    });
+    drawPreview();
+    refreshStats();
+  });
+}
+
+const exportState = {
+  format: "pdf",
+  quality: "high",
+  branding: true
+};
+
+
+
+document.getElementById("exportQuality").addEventListener("change", e => {
+  exportState.quality = e.target.value;
+});
+
+document.getElementById("brandingToggle").addEventListener("change", e => {
+  exportState.branding = e.target.checked;
+  document.getElementById("brandingImage").style.display =
+    exportState.branding ? "block" : "none";
+});
+
+document.querySelectorAll(".format-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    exportState.format = btn.dataset.format;
+
+    document
+      .querySelectorAll(".format-btn")
+      .forEach(b => b.classList.remove("btn-primary"));
+
+    btn.classList.add("btn-primary");
+
+    renderPreview();
+  });
+});
+
+function buildPreviewNode(template, prepared) {
+  const node = document.createElement("div");
+  node.className = `resume-preview ${template.className}`;
+  node.innerHTML = template.render(prepared);
+  return node;
+}
+
+
+
+function renderPreview() {
+  const template = templates[state.templateKey];
+  const prepared = prepareData();
+
+  const preview = document.getElementById("previewContent");
+  preview.innerHTML = "";
+  preview.appendChild(buildPreviewNode(template, prepared));
+}
+
+async function savePdf() {
+  const template = templates[state.templateKey];
+  const prepared = prepareData();
+
+  const exportNode = buildExportNode(template, prepared);
+  document.body.appendChild(exportNode);
+
+  const scale = exportState.quality === "high" ? 2 : 1.2;
+
+  try {
+    const canvas = await html2canvas(exportNode, {
+      scale,
+      backgroundColor: "#fff",
+      useCORS: true
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jspdf.jsPDF("p", "pt", "a4");
+
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    const imgWidth = pageWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft > 0) {
+      position -= pageHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    pdf.save(`${prepared.fullName || "resume"}.pdf`);
+  } finally {
+    document.body.removeChild(exportNode);
+  }
 }
 
 function saveHtml(template, prepared) {
@@ -777,20 +1042,34 @@ function saveHtml(template, prepared) {
   link.click();
   URL.revokeObjectURL(url);
 }
+function saveWord(template, prepared) {
+  const node = buildExportNode(template, prepared);
 
-if (downloadBtn) {
-  downloadBtn.addEventListener("click", savePdf);
+  const html = `
+    <html>
+      <head><meta charset="utf-8"></head>
+      <body>${node.outerHTML}</body>
+    </html>
+  `;
+
+  const blob = new Blob([html], { type: "application/msword" });
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "resume.doc";
+  a.click();
 }
-if (resetBtn) {
-  resetBtn.addEventListener("click", () => {
-    form.reset();
-    state.data = {};
-    Object.entries(collections).forEach(([sectionId, collection]) => {
-      collection.innerHTML = "";
-      const section = schema.find((s) => s.id === sectionId);
-      addRepeater(section, collection);
-    });
-    drawPreview();
-    refreshStats();
-  });
-}
+document.getElementById("confirmExport").addEventListener("click", async () => {
+  const status = document.getElementById("exportStatus");
+  status.textContent = "Preparing download...";
+
+  if (exportState.format === "pdf") {
+    await savePdf();
+  } else if (exportState.format === "html") {
+    saveHtml(templates[state.templateKey], prepareData());
+  } else {
+    saveWord(templates[state.templateKey], prepareData());
+  }
+
+  status.textContent = "";
+});

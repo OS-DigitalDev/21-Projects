@@ -1,0 +1,415 @@
+/* =========================
+   Root Theme
+========================= */
+:root {
+  --primary: #4f8cff;
+  --primary-soft: rgba(79, 140, 255, 0.25);
+  --accent: #00f5d4;
+
+  --bg-main: #0b0f1a;
+  --bg-grad: radial-gradient(
+    circle at top left,
+    #141c3d 0%,
+    #0b0f1a 55%,
+    #070b14 100%
+  );
+
+  --card-bg: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.12);
+
+  --text-main: #eaeaf0;
+  --text-muted: #9aa4bf;
+}
+
+/* =========================
+   Global Reset
+========================= */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, sans-serif;
+  background: var(--bg-grad);
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* =========================
+   App Container
+========================= */
+.app {
+  width: 100%;
+  max-width: 1100px;
+  padding: 40px 20px 60px;
+}
+
+/* =========================
+   Header
+========================= */
+#header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+#header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+}
+
+/* =========================
+   Buttons
+========================= */
+.btn {
+  background: linear-gradient(135deg, var(--primary), #6ea8ff);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 20px var(--primary-soft);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px var(--primary-soft);
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+/* Ghost button */
+.btn.ghost {
+  background: transparent;
+  color: var(--text-muted);
+  box-shadow: none;
+  border: 1px solid var(--border);
+}
+
+.btn.ghost:hover {
+  color: var(--text-main);
+  border-color: var(--primary);
+}
+
+/* =========================
+   Layout Top Section
+========================= */
+.top {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 24px;
+}
+
+/* =========================
+   Cards
+========================= */
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 26px;
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.45),
+    inset 0 0 0.5px rgba(255, 255, 255, 0.2);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 18px 55px rgba(0, 0, 0, 0.55),
+    0 0 22px var(--primary-soft);
+}
+
+.right-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================
+   Form Layout
+========================= */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+}
+
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+/* =========================
+   Inputs
+========================= */
+input,
+select,
+textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--text-main);
+  outline: none;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+/* =========================
+   Filters Section
+========================= */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.search {
+  flex: 1;
+}
+
+/* =========================
+   Task List
+========================= */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.list.small {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* =========================
+   Footer
+========================= */
+footer {
+  margin-top: 28px;
+  text-align: right;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 900px) {
+  .top {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================
+   Task Item
+========================= */
+.task {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  transition: all 0.25s ease;
+}
+
+.task:hover {
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-1px);
+}
+
+/* Completed */
+.task.is-completed {
+  opacity: 0.55;
+}
+
+.task.is-completed .task-title {
+  text-decoration: line-through;
+}
+
+/* Checkbox */
+.task-check {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+/* Body */
+.task-body {
+  flex: 1;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.task-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.task-notes {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.task-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+/* Actions */
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Chips */
+.chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+}
+
+/* Priority */
+.priority-high .chip {
+  border-color: rgba(231, 76, 60, 0.5);
+  color: #e74c3c;
+}
+
+.priority-medium .chip {
+  border-color: rgba(241, 196, 15, 0.5);
+  color: #f1c40f;
+}
+
+.priority-low .chip {
+  border-color: rgba(46, 204, 113, 0.5);
+  color: #2ecc71;
+}
+
+/* Due Soon */
+.is-due-soon {
+  animation: pulse 1.8s infinite;
+  border-color: rgba(231, 76, 60, 0.6);
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.35); }
+  70% { box-shadow: 0 0 0 12px rgba(231, 76, 60, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+}
+
+/* Empty */
+.empty {
+  text-align: center;
+  opacity: 0.6;
+  padding: 20px;
+  font-size: 0.9rem;
+}
+
+
+/* =========================
+   Toast / Snackbar
+========================= */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(20, 25, 45, 0.95);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 14px 18px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast button {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toast button:hover {
+  text-decoration: underline;
+}
+
+.toast.hidden {
+  display: none;
+}

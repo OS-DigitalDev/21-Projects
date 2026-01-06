@@ -53,6 +53,9 @@
                 <button id="themeToggle" class="btn btn-light btn-sm px-3">
                   Light mode
                 </button>
+                <button id="addSectionBtn" class="btn btn-light btn-sm px-3">
+                  + Add Section
+                </button>
               </div>
               <hr class="border border-white-25 my-4" />
               <p class="mb-2 small text-white-50">Template surface</p>
@@ -76,9 +79,16 @@
                   <p class="text-uppercase small text-muted mb-1">Blueprint</p>
                   <h2 class="h4 mb-0">Resume Schema</h2>
                 </div>
-                <button id="downloadBtn" class="btn btn-primary btn-sm px-3">
-                  Download PDF
+                <button
+                  id="downloadBtn"
+                  type="button"
+                  class="btn btn-primary btn-sm px-3"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exportModal"
+                >
+                  Download
                 </button>
+
               </div>
 
               <nav
@@ -94,6 +104,18 @@
                   id="templateSelect"
                   class="form-select form-select-sm"
                 ></select>
+              </div>
+
+              <div class="border rounded-4 p-3 bg-body mt-3">
+                <small class="text-muted d-block mb-2">Customize Colors</small>
+                <div class="mb-2">
+                  <label for="pageColorPicker" class="form-label small text-muted">Page Background</label>
+                  <input type="color" id="pageColorPicker" class="form-control form-control-color" value="#ffffff" title="Choose page color">
+                </div>
+                <div>
+                  <label for="textColorPicker" class="form-label small text-muted">Text Color</label>
+                  <input type="color" id="textColorPicker" class="form-control form-control-color" value="#000000" title="Choose text color">
+                </div>
               </div>
 
               <form id="resumeForm" class="vstack gap-4 mt-4"></form>
@@ -148,6 +170,116 @@
       </div>
     </main>
 
+
+
+
+
+
+
+    <!-- Add Custom Section Modal -->
+    <div class="modal fade" id="sectionModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Custom Section</h5>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <label for="sectionNameInput" class="form-label">Section Name</label>
+            <input type="text" id="sectionNameInput" class="form-control" placeholder="e.g., Hobbies, Certificates, Languages" autofocus>
+            <small class="text-muted d-block mt-2">Enter the name of the section you want to add</small>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+            <button id="confirmAddSection" class="btn btn-primary btn-sm">Add Section</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- modal  -->
+
+
+
+    <div class="modal fade" id="exportModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Export Resume</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- OPTIONS -->
+        <div class="d-flex flex-wrap gap-4 mb-4">
+
+          <!-- FORMAT -->
+          <div>
+            <p class="small text-muted mb-1">Format</p>
+            <div class="btn-group">
+              <button class="btn btn-outline-primary btn-sm format-btn" data-format="pdf">PDF</button>
+              <button class="btn btn-outline-primary btn-sm format-btn" data-format="html">HTML</button>
+              <button class="btn btn-outline-primary btn-sm format-btn" data-format="word">Word</button>
+            </div>
+          </div>
+
+          <!-- QUALITY -->
+          <div>
+            <p class="small text-muted mb-1">Quality</p>
+            <select id="exportQuality" class="form-select form-select-sm">
+              <option value="low">Low (Fast)</option>
+              <option value="high" selected>High (Sharp)</option>
+            </select>
+          </div>
+
+          <!-- BRANDING -->
+          <div class="form-check mt-4">
+            <input class="form-check-input" type="checkbox" id="brandingToggle" checked>
+            <label class="form-check-label small">
+              Include branding
+            </label>
+          </div>
+
+        </div>
+
+        <!-- PREVIEW -->
+        <div class="border rounded bg-light p-3">
+          <p class="small text-muted mb-2">Preview</p>
+
+          <div
+            id="exportPreview"
+            class="position-relative bg-white p-4"
+            style="min-height: 400px;"
+          >
+            <img
+              id="brandingImage"
+              src="branding.jpg"
+              class="position-absolute top-0 end-0 m-3"
+              style="width:80px;opacity:.85;"
+            />
+
+            <div id="previewContent"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <span id="exportStatus" class="me-auto small text-muted"></span>
+        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+        <button id="confirmExport" class="btn btn-primary btn-sm">
+          Download
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
@@ -156,5 +288,7 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
   </body>
 </html>
