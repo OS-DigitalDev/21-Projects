@@ -792,7 +792,7 @@ function toggleTheme() {
   // Role: flips between light and dark theme modes.
   const enableDark = document.body.dataset.mode !== "dark";
   document.body.dataset.mode = enableDark ? "dark" : "";
-  themeToggle.textContent = enableDark ? "Light mode" : "Dark mode";
+  themeToggle.textContent = enableDark ? "Dark mode" : "Light mode";
 }
 
 function syncForm() {

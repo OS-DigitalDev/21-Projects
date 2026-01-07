@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drawify</title>
+
+  <!-- Styles (empty for now) -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== Command / Navigation Bar ===== -->
+  <!-- <header class="command-bar">
+    <nav class="nav">
+      <button class="nav-btn active" id="basicMode">
+        Basic
+      </button>
+
+      <button class="nav-btn" id="advancedMode">
+        Advanced
+      </button>
+    </nav>
+  </header> -->
+
+  <!-- ===== Main App Area ===== -->
+  <main class="app">
+
+    <!-- Left Panel (Tools will come later) -->
+    <aside class="left-panel">
+      <!-- Tools go here -->
+       <!-- ===== Color Palette ===== -->
+        <div class="tool-section">
+        <h4 class="tool-title">Colors</h4>
+
+        <div class="color-palette">
+            <button class="color-swatch active" style="--swatch-color:#000"></button>
+            <button class="color-swatch" style="--swatch-color:#ef4444"></button>
+            <button class="color-swatch" style="--swatch-color:#22c55e"></button>
+            <button class="color-swatch" style="--swatch-color:#2563eb"></button>
+            <button class="color-swatch" style="--swatch-color:#eab308"></button>
+            <button class="color-swatch" style="--swatch-color:#a855f7"></button>
+
+        </div>
+        </div>
+        <!-- ===== Advanced Color Picker ===== -->
+        <div class="tool-section">
+        <h4 class="tool-title">Color Picker</h4>
+
+        <div class="color-picker">
+
+            <!-- Main color area -->
+            <div class="color-area">
+            <div class="color-cursor"></div>
+            </div>
+
+            <!-- Hue slider -->
+            <div class="hue-slider">
+            <div class="hue-cursor"></div>
+            </div>
+
+        </div>
+
+        <!-- Selected color preview -->
+        <div class="color-preview"></div>
+        </div>
+        <div class="tool-section">
+            <h4 class="tool-title">Opacity</h4>
+
+            <input
+                type="range"
+                class="alpha-slider"
+                min="0"
+                max="100"
+                value="100"
+            />
+
+            <div class="alpha-value">100%</div>
+        </div>
+       
+
+
+
+
+    </aside>
+
+    <!-- Drawing Area -->
+    <section class="canvas-area">
+      <!-- Canvas will come here later -->
+       <canvas id="drawCanvas"></canvas>
+    </section>
+
+    <aside class="right-panel">
+        <div class="tool-section">
+            <h4 class="tool-title">Tools & Shapes</h4>
+
+            <div class="tools">
+            <button class="tool-btn active" data-tool="pen">✏️</button>
+            <button class="tool-btn" data-tool="eraser">🧽</button>
+            <button class="tool-btn" data-tool="line">📏</button>
+            <button class="tool-btn" data-tool="rectangle">⬛</button>
+            <button class="tool-btn" data-tool="circle">⚪</button>
+            <button class="tool-btn" data-tool="triangle">🔺</button>
+            <button class="tool-btn" data-tool="star">⭐</button>
+            <button class="tool-btn" data-tool="pentagon">⬟</button>
+            <button class="tool-btn" data-tool="hexagon">⬢</button>
+            <button class="tool-btn" data-tool="bucket">🪣</button>
+
+            </div>
+        </div>
+        <div class="tool-section">
+            <h4 class="tool-title">Fill</h4>
+
+            <button class="fill-btn" id="fillToggle">
+                Fill: OFF
+            </button>
+        </div>
+
+    </aside>
+
+
+
+  </main>
+
+  <script src="./script.js"></script>
+
+</body>
+</html>

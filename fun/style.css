@@ -1,0 +1,350 @@
+/* ===============================
+   ROOT COLOR PALETTE
+   =============================== */
+
+:root {
+    
+    --active-color: #000000;
+    --picker-hue: rgb(30, 255, 0);
+    --active-alpha: 1;
+
+  /* Primary colors */
+  --color-primary: #2563eb;     /* Blue */
+  --color-secondary: #1e293b;   /* Dark slate */
+
+  /* Backgrounds */
+  --color-bg-main: #f8fafc;     /* App background */
+  --color-bg-panel: #ffffff;   /* Panels / cards */
+  --color-bg-navbar: #0f172a;  /* Top command bar */
+
+  /* Text colors */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #64748b;
+  --color-text-light: #f8fafc;
+
+  /* Border & divider */
+  --color-border: #e5e7eb;
+
+  /* Tool specific */
+  --color-accent: #22c55e;      /* Active tool */
+  --color-danger: #ef4444;      /* Delete / clear */
+
+  /* Canvas defaults */
+  --canvas-bg: #ffffff;
+}
+
+
+
+body {
+  background-color: var(--color-bg-main);
+  color: var(--color-text-primary);
+}
+
+
+.app {
+  display: flex;
+  height: 100vh;
+}
+
+/* ===============================
+   LEFT PANEL
+   =============================== */
+
+.left-panel {
+  width: 110px;
+  background-color: var(--color-bg-panel);
+  border-right: 1px solid var(--color-border);
+  padding: 16px;
+}
+
+.right-panel {
+  width: 35px;
+  background-color: var(--color-bg-panel);
+  border-left: 1px solid var(--color-border);
+  padding: 16px;
+}
+
+
+/* ===============================
+   TOOL SECTION
+   =============================== */
+
+.shape-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shape-btn {
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-bg-panel);
+  cursor: pointer;
+  border-radius: 6px;
+  text-align: left;
+}
+
+.shape-btn.active {
+  background: var(--color-primary);
+  color: white;
+}
+
+
+
+
+.tool-section {
+  margin-bottom: 24px;
+}
+
+.tool-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--color-text-secondary);
+}
+
+/* ===============================
+   COLOR PALETTE
+   =============================== */
+
+.color-palette {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.color-swatch {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  background-color: var(--swatch-color);
+}
+
+
+.color-swatch[data-color="black"] {
+  background-color: #000000;
+}
+
+.color-swatch[data-color="red"] {
+  background-color: #ef4444;
+}
+
+.color-swatch[data-color="green"] {
+  background-color: #22c55e;
+}
+
+.color-swatch[data-color="blue"] {
+  background-color: #2563eb;
+}
+
+.color-swatch[data-color="yellow"] {
+  background-color: #eab308;
+}
+
+.color-swatch[data-color="purple"] {
+  background-color: #a855f7;
+}
+
+/* ===============================
+   COLOR SWATCH STATES
+   =============================== */
+
+.color-swatch:hover {
+  transform: scale(1.05);
+}
+
+.color-swatch.active {
+  outline: 1px solid var(--color-primary);
+  outline-offset: 1px;
+  opacity: 1;
+}
+/* ===============================
+   DIM INACTIVE COLORS
+   =============================== */
+
+/* When any swatch is active */
+.color-palette:has(.color-swatch.active) .color-swatch {
+  opacity: 0.4;
+}
+
+/* When all swatches are inactive */
+.color-palette:not(:has(.color-swatch.active)) .color-swatch {
+  opacity: 1;
+}
+
+
+/* Keep active one highlighted */
+.color-palette:has(.color-swatch.active) .color-swatch.active {
+  opacity: 1;
+  outline: 1px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.color-picker {
+  display: flex;
+  gap: 12px;
+}
+
+.color-area {
+  width: 160px;
+  height: 160px;
+  position: relative;
+  border-radius: 8px;
+  cursor: crosshair;
+}
+
+.hue-slider {
+  width: 16px;
+  height: 160px;
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+  min-width: 16px;
+  min-height: 160px;
+}
+
+
+
+
+.color-preview {
+  width: 100%;
+  height: 30px;
+  margin-top: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+}
+
+.color-area {
+  background:
+    /* Value (brightness): top = no black, bottom = black */
+    linear-gradient(to bottom, rgba(255, 254, 254, 0.848), rgba(0, 0, 0, 0)),
+
+    /* Saturation: left = white, right = transparent */
+    linear-gradient(to right, rgba(0, 0, 0, 0.827), rgba(255,255,255,0)),
+
+   
+
+    /* Base hue */
+    var(--picker-hue, red);
+}
+
+
+
+
+
+
+
+
+
+.hue-slider {
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
+}
+
+
+.color-cursor {
+  width: 12px;
+  height: 12px;
+  border: 2px solid white;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.hue-cursor {
+  width: 100%;
+  height: 4px;
+  background: white;
+  position: absolute;
+  top: 50%;
+}
+
+.canvas-area {
+  background-color: var(--canvas-bg);
+}
+
+.active-tool {
+  background-color: var(--active-color);
+}
+
+
+.hue-slider {
+  background: linear-gradient(
+    to bottom,
+    hsl(0, 100%, 50%),
+    hsl(60, 100%, 50%),
+    hsl(120, 100%, 50%),
+    hsl(180, 100%, 50%),
+    hsl(240, 100%, 50%),
+    hsl(300, 100%, 50%),
+    hsl(360, 100%, 50%)
+  );
+}
+
+.alpha-slider {
+  width: 100%;
+  cursor: pointer;
+}
+
+.alpha-value {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+}
+
+
+.canvas-area {
+  flex: 1;
+  background: #f1f5f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#drawCanvas {
+  background: white;
+  border: 1px solid var(--color-border);
+  cursor: crosshair;
+}
+
+.tools {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tool-btn {
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-panel);
+  cursor: pointer;
+  border-radius: 6px;
+  text-align: left;
+}
+
+.tool-btn.active {
+  background: var(--color-primary);
+  color: white;
+}
+
+
+.fill-btn {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-panel);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.fill-btn.active {
+  background: var(--color-primary);
+  color: #fff;
+}
